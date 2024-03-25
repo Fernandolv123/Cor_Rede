@@ -541,7 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 854da52e5f32ec1489266b9c1602bb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cappedUsers: 2
+  cappedUsers: 6
 --- !u!4 &1775779859
 Transform:
   m_ObjectHideFlags: 0
