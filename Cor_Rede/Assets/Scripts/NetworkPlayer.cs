@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 //Alternativas a la serialización: crear una lista global y serializar el propio indice
 public class NetworkPlayer : NetworkBehaviour
 {
+    //Creo una variable privada para guardar la razon de desconexión
+    private string disconnectReason;
+    
     //por defecto las networks variables se comparten entre todos los usuarios
     public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
 
@@ -18,9 +22,20 @@ public class NetworkPlayer : NetworkBehaviour
     //OnNetworkSpawn se ejecutará siempre que se cree una nueva instancia del jugador
     public override void OnNetworkSpawn()
     {
+        //Comprobamos el numero de conexiones en el lado del servidor
+        if(NetworkManager.Singleton.IsServer){
+            //Desconectamos al ultimo cliente añadido
+            if (NetworkGameManager.ServerCapped()){
+                //Pongo un tiempo de buffer para esperar a que el NetworkManager haga su trabajo y evitar excepciones por race conditions
+                Invoke("KillList",0.005f);
+                return;
+            }
+        }
         //La variable IsOwner devuelve true cuando el id del jugador sea el tuyo
         if (IsOwner)
         {
+            //suscribimos al usuario para que sea notificado en caso de desconexión
+            NetworkManager.OnClientDisconnectCallback += Disconected();
             //Por tanto aqui solo entrará para el jugador recien spawneado
             ChangeInitialPositionRpc();
             ChangeMaterial();
@@ -62,5 +77,19 @@ public class NetworkPlayer : NetworkBehaviour
     {
         GetComponent<MeshRenderer>().material = listaMateriales[Index.Value];
         transform.position = Position.Value;
+    }
+
+    public System.Action<ulong> Disconected(){
+        //este método se llamará cuando se desconecte el usuario
+        //Todavia no entiendo como funciona Disconnected Reason, seguiré investigando
+        Debug.Log("You've been disconected for: "+NetworkManager.Singleton.DisconnectReason);
+        return null;
+    }
+
+    public void KillList(){
+        disconnectReason = "Maximun number of users reached";
+        NetworkManager.Singleton.DisconnectClient(NetworkManager.ConnectedClientsIds[NetworkManager.ConnectedClientsIds.Count-1],"Maximun number of users reached");
+        //Todavia no entiendo como funciona Disconnected Reason, seguiré investigando
+        Debug.Log(NetworkManager.Singleton.DisconnectReason);
     }
 }
