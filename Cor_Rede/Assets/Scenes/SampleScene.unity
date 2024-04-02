@@ -542,6 +542,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cappedUsers: 6
+  "materialesSinDue\xF1o":
+  - {fileID: 2100000, guid: c48f0d6b3c238b545b6fe419dd773beb, type: 2}
+  - {fileID: 2100000, guid: aab31ab66a91eec40bc459537a1c0cf4, type: 2}
+  - {fileID: 2100000, guid: 5b273150931c603478c055b775a0ef42, type: 2}
+  - {fileID: 2100000, guid: 40859bea9d7d7514980185bd6849e8ae, type: 2}
+  - {fileID: 2100000, guid: fb7a95491bfdd3f48b74f6ae7319858f, type: 2}
+  - {fileID: 2100000, guid: c414f53c07979674c880fb5df183dc87, type: 2}
 --- !u!4 &1775779859
 Transform:
   m_ObjectHideFlags: 0
