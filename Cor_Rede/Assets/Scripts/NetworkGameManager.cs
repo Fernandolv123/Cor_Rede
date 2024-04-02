@@ -1,8 +1,15 @@
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
 public class NetworkGameManager : MonoBehaviour
 {
+    //Creo una variable publica capped users para poder realizar pruebas con mayor facilidad
+    public static int CappedUsers;
+    public int cappedUsers;
+    void Awake(){
+        CappedUsers = cappedUsers;
+    }
     //NetworkManager contiene un singleton y variables para comprobar el modo de ejecución (server host o cliente)
     void OnGUI()
     {
@@ -25,9 +32,17 @@ public class NetworkGameManager : MonoBehaviour
     static void StartButtons()
     {
         //En este punto se inicairá el tipo de conexión
-        if (GUILayout.Button("Host")) NetworkManager.Singleton.StartHost();
-        if (GUILayout.Button("Client")) NetworkManager.Singleton.StartClient();
+        if (GUILayout.Button("Host"))NetworkManager.Singleton.StartHost();
+        if (GUILayout.Button("Client"))NetworkManager.Singleton.StartClient();
         if (GUILayout.Button("Server")) NetworkManager.Singleton.StartServer();
+    }
+
+    //Comprobamos la cantidad de usuarios conectados en el servidor, si es mayor que el numero determinado, no se podrán conectar más
+    public static bool ServerCapped(){
+        //ConnectedClients solo puede ser llamado desde el servidor, por lo que necesitariamos pasarlo manualmente a todos los usuarios, sin embargo, ConnectedClientsIds puede ser utilizado
+        //Conectedids es algo a lo que solo tienen acceso el servidor
+        return NetworkManager.Singleton.ConnectedClientsIds.Count > CappedUsers;
+
     }
 
     static void StatusLabels()
@@ -51,6 +66,7 @@ public class NetworkGameManager : MonoBehaviour
             }
             else
             {
+                
                 NetworkObject playerObject = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
                 NetworkPlayer player = playerObject.GetComponent<NetworkPlayer>();
                 player.ChangeMaterial();
