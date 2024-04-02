@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -7,7 +8,11 @@ public class NetworkGameManager : MonoBehaviour
     //Creo una variable publica capped users para poder realizar pruebas con mayor facilidad
     public static int CappedUsers;
     public int cappedUsers;
+    //Creo una lista con todos los colores sin escoger
+    public List<Material> materialesSinDueño;
+    public static NetworkGameManager instance;
     void Awake(){
+        instance = this;
         CappedUsers = cappedUsers;
     }
     //NetworkManager contiene un singleton y variables para comprobar el modo de ejecución (server host o cliente)

@@ -15,6 +15,7 @@ public class NetworkPlayer : NetworkBehaviour
     //Creamos una variable Int de tipo NetworkVariable para poder pasarla entre programas
     //Existe un problema con pasar una variable de tipo Material, y es que este tipo de datos no esta serializado, por l oque deberíamos hacerlo por nosotros mismos
     public NetworkVariable<int> Index = new NetworkVariable<int>();
+    public NetworkList<int> listIndex = new NetworkList<int>();
 
     //Creamos una variable local con la lista de materiales con las que consta el jugador para cambiar
     public List<Material> listaMateriales;
@@ -60,10 +61,12 @@ public class NetworkPlayer : NetworkBehaviour
 
     [Rpc(SendTo.Server)]
     void SubmitNewMaterialRpc(RpcParams rpcParams = default){
+        //NetworkGameManager.instance.materialesSinDueño.Add(listaMateriales[Index.Value]);
         int indice = Random.Range(0,listaMateriales.Count);
         while (indice == Index.Value){
             indice = Random.Range(0,listaMateriales.Count);
         }
+        //NetworkGameManager.instance.materialesSinDueño.Remove(listaMateriales[indice]);
         //Es necesario utilizar el .value para acceder al tipo de variable, si no accederemos a la network variable
         Index.Value = indice;
     }
