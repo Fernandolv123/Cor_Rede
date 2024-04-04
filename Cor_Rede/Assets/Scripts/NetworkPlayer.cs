@@ -64,13 +64,6 @@ public class NetworkPlayer : NetworkBehaviour
     [Rpc(SendTo.Server)]
     void SubmitNewMaterialRpc(RpcParams rpcParams = default){
         //Esta es la comprobación de entrada para determinar los colores y sus contrapartes en la lista
-        /*Debug.Log(NetworkGameManager.instance.materialesSinDueño.Count+"-----Entrando-----"+Index.Value);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[0]);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[1]);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[2]);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[3]);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[4]);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[5]);*/
 
         int newMaterial = Random.Range(0,NetworkGameManager.instance.materialesSinDueño.Count);
         while (NetworkGameManager.instance.materialesSinDueño[newMaterial] == null){
@@ -92,13 +85,6 @@ public class NetworkPlayer : NetworkBehaviour
         NetworkGameManager.instance.materialesSinDueño[Index.Value] = null;
 
         //Esta es la comprobación de salida para determinar los colores y sus contrapartes en la lista
-        /*Debug.Log(NetworkGameManager.instance.materialesSinDueño.Count+"-----Saliendo-----"+Index.Value);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[0]);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[1]);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[2]);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[3]);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[4]);
-        Debug.Log(NetworkGameManager.instance.materialesSinDueño[5]);*/
     }
 
     static Vector3 GetRandomPositionOnPlane()
@@ -113,6 +99,8 @@ public class NetworkPlayer : NetworkBehaviour
     }
 
     public System.Action<ulong> Disconected(){
+        //En caso de desconexión debemos marcar como disponible el color
+        NetworkGameManager.instance.materialesSinDueño[Index.Value] = listaMateriales[Index.Value];
         //este método se llamará cuando se desconecte el usuario
         //Todavia no entiendo como funciona Disconnected Reason, seguiré investigando
         Debug.Log("You've been disconected for: "+NetworkManager.Singleton.DisconnectReason);

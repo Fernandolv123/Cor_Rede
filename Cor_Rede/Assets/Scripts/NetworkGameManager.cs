@@ -11,6 +11,7 @@ public class NetworkGameManager : NetworkBehaviour
     //Creo una lista con todos los colores en servidor para marcar aquellos colores en uso como no disponibles
     public List<Material> materialesSinDueño;
     //Creo un patrón singletone para poder acceder a la lista
+    //IMPORTANTE: las variables static pertenecen a la clase, no a las instancias
     public static NetworkGameManager instance;
     void Awake(){
         instance = this;
